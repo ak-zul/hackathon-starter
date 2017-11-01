@@ -267,18 +267,24 @@ exports.reviewEdit = function (req, res) {
 };
 exports.reviewDelete = function (req, res) {
     var postedBy = req.params.idUser;
-    Venue.update({_id:req.params.id},
-        // function (err,venue) {
-        // if(err){
-        //     req.flash('errors',{msg:"something went wrong with review Delelte"});
-        // }
-        //console.log(venue.review);
-        {$pull: {review: {postedBy: postedBy}}}
-        //venue.review.id(req.params.idUser).remove();
-        // venue.save();
-    ,function(){
-        res.json({ result:"now u delete the review"});
+    Venue.findOne({_id:req.params.id}, function(err, venue){
+        venue.review.pull({postedBy: postedBy});
+        venue.save();
+        res.json({venue:venue, result:"now u delete the review"});
+    });
 
-    })
+    // Venue.update({_id:req.params.id},
+    //     // function (err,venue) {
+    //     // if(err){
+    //     //     req.flash('errors',{msg:"something went wrong with review Delelte"});
+    //     // }
+    //     //console.log(venue.review);
+    //     {$pull: {review: {postedBy: postedBy}}}
+    //     //venue.review.id(req.params.idUser).remove();
+    //     // venue.save();
+    // ,function(){
+    //     res.json({ result:"now u delete the review"});
+    //
+    // })
     // })
 };
