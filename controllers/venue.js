@@ -25,7 +25,7 @@ exports.createVenue= (req, res,next) => {
         upload(req, res, function (err) {
 
             console.log(req.files);
-            if(req.files.length) {
+            if(req.files && req.files.length) {
                 for(var i=0; i<req.files.length;i++){
                     const buffer = readChunk.sync("./uploads/" + req.files[i].filename, 0, 4100);
                     fileType(buffer);
@@ -52,8 +52,8 @@ exports.createVenue= (req, res,next) => {
             }
             // Everything went fine
 
-            req.checkBody("email", "Enter a valid email address.").isEmail();
-            req.checkBody("phone", "Enter a valid IND phone number.").isMobilePhone("en-IN");
+            // req.checkBody("email", "Enter a valid email address.").isEmail();
+            // req.checkBody("phone", "Enter a valid IND phone number.").isMobilePhone("en-IN");
 
             var errors = req.validationErrors();
             if (errors) {
@@ -80,12 +80,12 @@ exports.createVenue= (req, res,next) => {
                     if (err) {
                         return next(err);
                     }
-                    if (existingvenue) {
-                        //req.flash('errors',{msg:'venue with that name already exist!!'});
-                        //return res.redirect('/createVenue');
-                        return res.json({result: "venue with that name already exist!!"})
-
-                    }
+                    // if (existingvenue) {
+                    //     //req.flash('errors',{msg:'venue with that name already exist!!'});
+                    //     //return res.redirect('/createVenue');
+                    //     return res.json({result: "venue with that name already exist!!"})
+                    //
+                    // }
                     venue.save((err) => {
                         if (err) {
                             req.flash('errors', {msg: 'can not save'})
@@ -224,54 +224,54 @@ exports.venueSportDelete = function (req, res) {
 //
 // };
 
-exports.makeReview = function(req,res){
-    Venue.findOne({_id:req.params.id},function (err, venue) {
-        if (err) {
-            req.flash('errors', {msg: 'Something wrong Rating'})
-        }
-        console.log(req.body);
-        venue.review.push({rating:req.body.rating,description:req.body.description,postedBy:req.params.idUser});
-        venue.save( function (err) {
-            if (err) { req.flash('errors', { msg: 'can not save' }); }
-
-            res.json({"result":"this is result after savnig the data!!"})
-        });
-    })
-};
-exports.reviewList = function(req,res){
-    Venue.findOne({
-        _id: req.params.id
-    })
-        .populate('review', ' rating description')
-        .exec(
-            function(err, venue) {
-                if (err) res.status(500).send(err);
-
-                res.json(venue.review);
-            });
-};
-exports.reviewEdit = function (req, res) {
-    Venue.findOneAndUpdate(     {
-            _id: req.params.id,
-            "review.postedBy":req.params.idUser
-        },
-        {
-            "$set": {
-                "review.$.rating":req.body.rating,
-                "review.$.description":req.body.description,
-            }
-        },{ new: true }, function (err,venueEdit) {
-
-            res.json({venueEdit:venueEdit,result:"ur done for editing!!"});
-        })
-};
-exports.reviewDelete = function (req, res) {
-    var postedBy = req.params.idUser;
-    Venue.findOne({_id:req.params.id}, function(err, venue){
-        venue.review.pull({postedBy: postedBy});
-        venue.save();
-        res.json({venue:venue, result:"now u delete the review"});
-    });
+// exports.makeReview = function(req,res){
+//     Venue.findOne({_id:req.params.id},function (err, venue) {
+//         if (err) {
+//             req.flash('errors', {msg: 'Something wrong Rating'})
+//         }
+//         console.log(req.body);
+//         venue.review.push({rating:req.body.rating,description:req.body.description,postedBy:req.params.idUser});
+//         venue.save( function (err) {
+//             if (err) { req.flash('errors', { msg: 'can not save' }); }
+//
+//             res.json({"result":"this is result after savnig the data!!"})
+//         });
+//     })
+// };
+// exports.reviewList = function(req,res){
+//     Venue.findOne({
+//         _id: req.params.id
+//     })
+//         .populate('review', ' rating description')
+//         .exec(
+//             function(err, venue) {
+//                 if (err) res.status(500).send(err);
+//
+//                 res.json(venue.review);
+//             });
+// };
+// exports.reviewEdit = function (req, res) {
+//     Venue.findOneAndUpdate(     {
+//             _id: req.params.id,
+//             "review.postedBy":req.params.idUser
+//         },
+//         {
+//             "$set": {
+//                 "review.$.rating":req.body.rating,
+//                 "review.$.description":req.body.description,
+//             }
+//         },{ new: true }, function (err,venueEdit) {
+//
+//             res.json({venueEdit:venueEdit,result:"ur done for editing!!"});
+//         })
+// };
+// exports.reviewDelete = function (req, res) {
+//     var postedBy = req.params.idUser;
+//     Venue.findOne({_id:req.params.id}, function(err, venue){
+//         venue.review.pull({postedBy: postedBy});
+//         venue.save();
+//         res.json({venue:venue, result:"now u delete the review"});
+//     });
 
     // Venue.update({_id:req.params.id},
     //     // function (err,venue) {
@@ -287,4 +287,4 @@ exports.reviewDelete = function (req, res) {
     //
     // })
     // })
-};
+// };

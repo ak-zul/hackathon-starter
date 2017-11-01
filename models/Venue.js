@@ -37,11 +37,11 @@ const venueSchema = new mongoose.Schema({
     address: String,
     email:String,
     phone:Number,
-    description:String,
-
-    photo:[venuePhotoSchema],
-    review:[venueReviewSchema],
-    sports:[sportNameSchema]
+    description:String
+    //
+    // photo:[venuePhotoSchema],
+    // review:[venueReviewSchema],
+    // sports:[sportNameSchema]
 }, { timestamps: true });
 
 const Venue = mongoose.model('Venue', venueSchema);
