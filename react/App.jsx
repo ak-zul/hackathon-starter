@@ -45,9 +45,9 @@ class App extends React.Component {
 
             <div>
 
-                {/*{this.state.editvenue._id ? (*/}
+                {this.state.editvenue._id ? (
                     <EditVenue venue={this.state.editvenue}/>
-                {/*  ) : null}*/}
+                  ) : null}
 
                 <table>
                     <thead>
@@ -89,7 +89,9 @@ class TableRow extends React.Component {
                                 {this.props.data._id}
 
                             </td>
-
+<td>
+    {this.props.data.email}
+</td>
                             <td>
                             {/*{this.props.data.address}*/}
                             <Button id="editBtn"  onClick={this.updateVenueID}> Edit</Button>
@@ -199,29 +201,19 @@ class EditVenue extends React.Component{
         return(
             <div>
 
-                <input
-                    label="Name"
-                    id="margin-dense"
-                    value={this.state.name}
 
-                    onChange={this.updateForm}
-                />
-                <input
+
+                <TextField
                     label="Email"
                     id="margin-dense"
                     value={this.state.email}
-
-
+                    helperText="Enter New name"
+                    margin="dense"
                     onChange={this.updateForm}
                 />
-                <input
-                    label="Address"
-                    id="margin-dense"
-                    value={this.state.address}
 
 
-                    onChange={this.updateForm}
-                />
+
                 {/*<TextField  name="name" defaultValue={this.state.name} onChange={this.updateForm}/><br/>*/}
             <Button  onClick={this.updateVenue} >Edit</Button>
             </div>
