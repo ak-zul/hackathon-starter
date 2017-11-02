@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
 
 class App extends React.Component {
     constructor(props) {
@@ -7,7 +9,7 @@ class App extends React.Component {
 
         this.state = {
             posts: [],
-          editvenue:""
+          editvenue:{}
         };
 
          this.updateVenueLists = this.updateVenueLists.bind(this);
@@ -21,7 +23,7 @@ class App extends React.Component {
 
     updateVenueID(venue){
         this.setState({editvenue:venue},function(){
-            console.log(this.state)
+            console.log(this.state.editvenue._id) //popop
         })
     }
 
@@ -54,7 +56,10 @@ class App extends React.Component {
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
-                <EditVenue venue={this.state.editvenue}/>
+
+                {/*{this.state.editvenue._id ? (*/}
+                    <EditVenue venue={this.state.editvenue}/>
+                {/*  ) : null}*/}
             </div>
 
         );
@@ -86,7 +91,7 @@ class TableRow extends React.Component {
 
                             <td>
                             {/*{this.props.data.address}*/}
-                            <button id="editBtn"  onClick={this.updateVenueID}> Edit</button>
+                            <Button id="editBtn"  onClick={this.updateVenueID}> Edit</Button>
                             </td>
                         </tr>
         );
@@ -133,8 +138,7 @@ class CreateVenue extends React.Component{
         return (
             <div>
                 <input type = "text" name="email" onChange = {this.updateEmail} />
-                <input type="submit" onClick={this.createvenue} />
-                <input type="submit" onClick={this.props.updateVenueLists} />
+                <Button type="submit" onClick={this.createvenue} >ADD </Button>
             </div>
         );
     }
@@ -144,26 +148,86 @@ class CreateVenue extends React.Component{
 class EditVenue extends React.Component{
     constructor(props){
         super(props);
-        this.state = {
+        // this.state = this.props.venue
 
-        };
 
         this.updateVenue = this.updateVenue.bind(this)
+        this.updateForm = this.updateForm.bind(this)
+    }
+
+    updateForm(e){
+        var obj ={};
+        obj[e.target.name] = e.target.value
+        this.setState(obj, function(){
+            console.log(this.state);
+        })
+    }
+
+    componentDidMount(){
+        this.setState(this.props.venue,function(){
+            console.log(this.state._id)
+            // debugger;
+            window.m = this.state
+            window.mp = this.props
+        })
+
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        // var venue = this.props.venue;
+        debugger;
+        this.setState(nextProps.venue,function(){
+            console.log(this.state._id)//pip
+            window.p= this.state
+            window.pp = nextProps
+        });
+        //this.props.updateVenueLists
     }
 
     updateVenue(){
+        console.log(this.state);
+        axios.post('api/venueEdit/'+this.state._id,{name:this.state.name,email:this.state.email,address:this.state.address})
+            .then(res=>{
+                console.log(res);
+                //this.props.updateVenueLists();
 
-
-        console.log(this.props)
+            })
     }
     render(){
         return(
             <div>
-
-
-            <input type="submit" onClick={this.updateVenue} />
+                <TextField
+                    label="Name"
+                    id="margin-dense"
+                    defaultValue={this.props.venue.name}
+                    helperText="Enter New name"
+                    margin="dense"
+                    onChange={this.updateForm}
+                />
+                <TextField
+                    label="Email"
+                    id="margin-dense"
+                    defaultValue={this.props.venue.email}
+                    helperText="Enter New Email"
+                    margin="dense"
+                    onChange={this.updateForm}
+                />
+                <TextField
+                    label="Address"
+                    id="margin-dense"
+                    defaultValue={this.props.venue.address}
+                    helperText="Enter New Address"
+                    margin="dense"
+                    onChange={this.updateForm}
+                />
+                {/*<TextField  name="name" defaultValue={this.state.name} onChange={this.updateForm}/><br/>*/}
+            <Button  onClick={this.updateVenue} >Edit</Button>
             </div>
         );
     }
+}
+class DeleteVenue extends React.Component{
+
 }
 export default App;
