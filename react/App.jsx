@@ -7,7 +7,7 @@ class App extends React.Component {
 
         this.state = {
             posts: [],
-            editvenueid:""
+          editvenue:""
         };
 
          this.updateVenueLists = this.updateVenueLists.bind(this);
@@ -19,8 +19,8 @@ class App extends React.Component {
        this.updateVenueLists();
     }
 
-    updateVenueID(id){
-        this.setState({editvenueid:id},function(){
+    updateVenueID(venue){
+        this.setState({editvenue:venue},function(){
             console.log(this.state)
         })
     }
@@ -54,7 +54,7 @@ class App extends React.Component {
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
-                <EditVenue venueid={this.state.editvenueid}/>
+                <EditVenue venue={this.state.editvenue}/>
             </div>
 
         );
@@ -70,7 +70,8 @@ class TableRow extends React.Component {
     }
 
     updateVenueID(){
-        this.props.updateVenueID(this.props.data._id)
+        console.log(this.props)
+        this.props.updateVenueID(this.props.data)
 
     }
 
@@ -138,14 +139,13 @@ class CreateVenue extends React.Component{
         );
     }
 
-
 }
 
 class EditVenue extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            posts: []
+
         };
 
         this.updateVenue = this.updateVenue.bind(this)
