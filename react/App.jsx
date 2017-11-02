@@ -44,6 +44,11 @@ class App extends React.Component {
         return (
 
             <div>
+
+                {/*{this.state.editvenue._id ? (*/}
+                    <EditVenue venue={this.state.editvenue}/>
+                {/*  ) : null}*/}
+
                 <table>
                     <thead>
                     <tr>
@@ -56,10 +61,6 @@ class App extends React.Component {
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
-
-                {/*{this.state.editvenue._id ? (*/}
-                    <EditVenue venue={this.state.editvenue}/>
-                {/*  ) : null}*/}
             </div>
 
         );
@@ -148,7 +149,7 @@ class CreateVenue extends React.Component{
 class EditVenue extends React.Component{
     constructor(props){
         super(props);
-        // this.state = this.props.venue
+        this.state = {}
 
 
         this.updateVenue = this.updateVenue.bind(this)
@@ -197,28 +198,28 @@ class EditVenue extends React.Component{
     render(){
         return(
             <div>
-                <TextField
+
+                <input
                     label="Name"
                     id="margin-dense"
-                    defaultValue={this.props.venue.name}
-                    helperText="Enter New name"
-                    margin="dense"
+                    value={this.state.name}
+
                     onChange={this.updateForm}
                 />
-                <TextField
+                <input
                     label="Email"
                     id="margin-dense"
-                    defaultValue={this.props.venue.email}
-                    helperText="Enter New Email"
-                    margin="dense"
+                    value={this.state.email}
+
+
                     onChange={this.updateForm}
                 />
-                <TextField
+                <input
                     label="Address"
                     id="margin-dense"
-                    defaultValue={this.props.venue.address}
-                    helperText="Enter New Address"
-                    margin="dense"
+                    value={this.state.address}
+
+
                     onChange={this.updateForm}
                 />
                 {/*<TextField  name="name" defaultValue={this.state.name} onChange={this.updateForm}/><br/>*/}
