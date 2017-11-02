@@ -45,9 +45,7 @@ class App extends React.Component {
 
             <div>
 
-                {this.state.editvenue._id ? (
-                    <EditVenue venue={this.state.editvenue}/>
-                  ) : null}
+
 
                 <table>
                     <thead>
@@ -61,6 +59,9 @@ class App extends React.Component {
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
+                {this.state.editvenue._id ? (
+                    <EditVenue venue={this.state.editvenue}/>
+                ) : null}
             </div>
 
         );
@@ -170,8 +171,8 @@ class EditVenue extends React.Component{
         this.setState(this.props.venue,function(){
             console.log(this.state._id)
             // debugger;
-            window.m = this.state
-            window.mp = this.props
+            // window.m = this.state
+            // window.mp = this.props
         })
 
 
@@ -182,8 +183,8 @@ class EditVenue extends React.Component{
         debugger;
         this.setState(nextProps.venue,function(){
             console.log(this.state._id)//pip
-            window.p= this.state
-            window.pp = nextProps
+            // window.p= this.state
+            // window.pp = nextProps
         });
         //this.props.updateVenueLists
     }
