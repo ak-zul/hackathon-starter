@@ -201,25 +201,28 @@ class EditVenue extends React.Component{
 
 
 
-                <input
+                <TextField
                     name="email"
                     id="margin-dense"
                     value={this.state.email}
-
+                    helperText="Enter New email"
+                    margin="dense"
                     onChange={this.updateForm}
                 />
-                <input
+                <TextField
                     name="name"
                     id="margin-dense"
                     value={this.state.name}
-
+                    helperText="Enter New name"
+                    margin="dense"
                     onChange={this.updateForm}
                 />
-                <input
+                <TextField
                     name="address"
                     id="margin-dense"
                     value={this.state.address}
-
+                    helperText="Enter New address"
+                    margin="dense"
                     onChange={this.updateForm}
                 />
 
