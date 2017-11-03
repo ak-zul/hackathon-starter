@@ -27,7 +27,6 @@ class App extends React.Component {
         })
     }
 
-
     updateVenueLists(){
         axios.get("/api/venueList")
             .then(res => {
@@ -44,9 +43,9 @@ class App extends React.Component {
         return (
 
             <div>
-
-
-
+                {this.state.editvenue._id ? (
+                    <EditVenue venue={this.state.editvenue}/>
+                ) : null}
                 <table>
                     <thead>
                     <tr>
@@ -59,9 +58,7 @@ class App extends React.Component {
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
-                {this.state.editvenue._id ? (
-                    <EditVenue venue={this.state.editvenue}/>
-                ) : null}
+
             </div>
 
         );
@@ -204,16 +201,27 @@ class EditVenue extends React.Component{
 
 
 
-                <TextField
-                    label="Email"
+                <input
+                    name="email"
                     id="margin-dense"
                     value={this.state.email}
-                    helperText="Enter New name"
-                    margin="dense"
+
                     onChange={this.updateForm}
                 />
+                <input
+                    name="name"
+                    id="margin-dense"
+                    value={this.state.name}
 
+                    onChange={this.updateForm}
+                />
+                <input
+                    name="address"
+                    id="margin-dense"
+                    value={this.state.address}
 
+                    onChange={this.updateForm}
+                />
 
                 {/*<TextField  name="name" defaultValue={this.state.name} onChange={this.updateForm}/><br/>*/}
             <Button  onClick={this.updateVenue} >Edit</Button>
