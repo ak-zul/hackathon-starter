@@ -4,6 +4,7 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { Link } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
+import { browserHistory } from 'react-router'
 
 
 
@@ -20,22 +21,52 @@ class App extends React.Component {
         );
     }
 }
-const Header = () => (
-    <header>
-        <nav>
-            <ul>
-                <li><Link to=''>Home</Link></li>
-            </ul>
-        </nav>
-    </header>
-);
-const Main = () => (
-    <main>
-        <Switch>
-            <Route exact path='/' component={VenuesData}/>
-        </Switch>
-    </main>
-)
+class Header extends  React.Component {
+    render(){
+        return(
+            <header>
+                <nav>
+                    <ul>
+                        <li><Link to=''>Home</Link></li>
+                        <li><Link to="/create">Create</Link></li>
+                    </ul>
+                </nav>
+            </header>
+        )
+    }}
+
+class Main extends React.Component {
+    constructor(props) {
+        super(props);
+
+        // this.history = browserHistory
+    }
+    updateVenueLists(){
+        axios.get("/api/venueList")
+            .then(res => {
+                console.log(res);
+                const   posts = res.data.venueList;
+                this.setState({ posts:posts});
+            });
+    }
+    componentDidMount() {
+        // debugger;
+        this.updateVenueLists();
+    }
+    render(){
+        return(
+            <main>
+                <Switch>
+                    <Route exact path='/' component={VenuesData}/>
+                    <Route path='/create'  render={(history) =><CreateVenue   history={history}/>}/>
+                </Switch>
+
+
+            </main>
+        )
+    }
+
+}
 
 class VenuesData extends React.Component {
     constructor(props) {
@@ -46,9 +77,9 @@ class VenuesData extends React.Component {
           editvenue:{}
         };
 
-         this.updateVenueLists = this.updateVenueLists.bind(this);
-         this.updateVenueID = this.updateVenueID.bind(this);
-        this.deleteVenue = this.deleteVenue.bind(this);
+         // this.updateVenueLists = this.updateVenueLists.bind(this);
+         // this.updateVenueID = this.updateVenueID.bind(this);
+        // this.deleteVenue = this.deleteVenue.bind(this);
     }
 
     componentDidMount() {
@@ -97,7 +128,6 @@ class VenuesData extends React.Component {
                     {this.state.posts.map((venue, i) => <TableRow key = {i} data = {venue} updateVenueID={this.updateVenueID} deleteVenue={this.deleteVenue} />)}
                     </tbody>
                 </table>
-                <CreateVenue updateVenueLists={this.updateVenueLists}/>
 
             </div>
 
@@ -168,7 +198,9 @@ class CreateVenue extends React.Component{
             .then(res=>{
             console.log(res);
 
-            this.props.updateVenueLists();
+            // this.props.updateVenueLists();
+                this.props.history.history.push('/');
+                console.log(this.props)
 
         })
     }
