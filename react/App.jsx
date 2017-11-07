@@ -58,7 +58,7 @@ class Main extends React.Component {
             <main>
                 <Switch>
                     <Route exact path='/' component={VenuesData}/>
-                    <Route path='/create'  render={(history) =><CreateVenue   history={history}/>}/>
+                    <Route path='/create'  render={(history) =><CreateVenue   browserRedirect={history}/>}/>
                 </Switch>
 
 
@@ -199,7 +199,7 @@ class CreateVenue extends React.Component{
             console.log(res);
 
             // this.props.updateVenueLists();
-                this.props.history.history.push('/');
+                this.props.browserRedirect.history.push('/');
                 console.log(this.props)
 
         })
