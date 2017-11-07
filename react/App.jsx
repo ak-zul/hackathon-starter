@@ -4,7 +4,8 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import { Link } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
+import PropTypes from "prop-types";
 
 
 
@@ -58,7 +59,7 @@ class Main extends React.Component {
             <main>
                 <Switch>
                     <Route exact path='/' component={VenuesData}/>
-                    <Route path='/create'  render={(history) =><CreateVenue   browserRedirect={history}/>}/>
+                    <Route path='/create'  render={(props) =><CreateVenue/>}/>
                 </Switch>
 
 
@@ -176,8 +177,11 @@ class TableRow extends React.Component {
 }
 
 class CreateVenue extends React.Component{
-    constructor(props) {
-        super(props);
+    static contextTypes = {
+        router: PropTypes.object
+    };
+    constructor(props, context) {
+        super(props,context);
 
         this.state = {
             email: ""
@@ -199,8 +203,9 @@ class CreateVenue extends React.Component{
             console.log(res);
 
             // this.props.updateVenueLists();
-                this.props.browserRedirect.history.push('/');
-                console.log(this.props)
+            //     this.props.browserRedirect.history.push('/');
+                this.context.router.history.push("/");
+                // console.log(this.props)
 
         })
     }

@@ -31,7 +31,7 @@ var config = {
                 loader: 'babel-loader',
 
                 query: {
-                    presets: ['es2015', 'react']
+                    presets:['es2015','react','stage-0','stage-1','stage-2','stage-3']
                 }
             }
         ]
