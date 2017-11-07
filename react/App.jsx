@@ -3,6 +3,8 @@ import axios from 'axios';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
+
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +16,7 @@ class App extends React.Component {
 
          this.updateVenueLists = this.updateVenueLists.bind(this);
          this.updateVenueID = this.updateVenueID.bind(this);
+        this.deleteVenue = this.deleteVenue.bind(this);
     }
 
     componentDidMount() {
@@ -35,8 +38,13 @@ class App extends React.Component {
                 this.setState({ posts:posts});
             });
     }
-    editVenue(id){
+    deleteVenue(id){
         console.log(id);
+        axios.post("/api/venueDelete/"+id)
+            .then(res => {
+                console.log(res);
+                this.updateVenueLists();
+            });
     }
 
     render() {
@@ -54,7 +62,7 @@ class App extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.posts.map((venue, i) => <TableRow key = {i} data = {venue} updateVenueID={this.updateVenueID}/>)}
+                    {this.state.posts.map((venue, i) => <TableRow key = {i} data = {venue} updateVenueID={this.updateVenueID} deleteVenue={this.deleteVenue} />)}
                     </tbody>
                 </table>
                 <CreateVenue updateVenueLists={this.updateVenueLists}/>
@@ -70,15 +78,18 @@ class App extends React.Component {
 class TableRow extends React.Component {
     constructor(props) {
         super(props);
-        this.updateVenueID=this.updateVenueID.bind(this)
+        this.updateVenueID=this.updateVenueID.bind(this);
+        this.deleteVenue=this.deleteVenue.bind(this)
     }
 
     updateVenueID(){
-        console.log(this.props)
+        //console.log(this.props)
         this.props.updateVenueID(this.props.data)
 
     }
-
+    deleteVenue(){
+        this.props.deleteVenue(this.props.data._id);
+    }
     render() {
         return (
                         <tr>
@@ -87,26 +98,20 @@ class TableRow extends React.Component {
                                 {this.props.data._id}
 
                             </td>
-<td>
-    {this.props.data.email}
-</td>
+                            <td>
+                                {this.props.data.email}
+                            </td>
                             <td>
                             {/*{this.props.data.address}*/}
                             <Button id="editBtn"  onClick={this.updateVenueID}> Edit</Button>
+                            </td>
+                            <td>
+                                <Button id="deleteBtn"  onClick={this.deleteVenue}> Delete</Button>
                             </td>
                         </tr>
         );
     }
 }
-// class ThirdComponent extends React.Component {
-//     render() {
-//         return (
-//             <li>
-//             <TableRow x = {this.props.data} />
-//             </li>
-//         );
-//     }
-// }
 
 class CreateVenue extends React.Component{
     constructor(props) {
@@ -149,24 +154,24 @@ class CreateVenue extends React.Component{
 class EditVenue extends React.Component{
     constructor(props){
         super(props);
-        this.state = {}
+        this.state = {};
 
 
-        this.updateVenue = this.updateVenue.bind(this)
+        this.updateVenue = this.updateVenue.bind(this);
         this.updateForm = this.updateForm.bind(this)
     }
 
     updateForm(e){
         var obj ={};
-        obj[e.target.name] = e.target.value
+        obj[e.target.name] = e.target.value;
         this.setState(obj, function(){
-            console.log(this.state);
+            // console.log(this.state);
         })
     }
 
     componentDidMount(){
         this.setState(this.props.venue,function(){
-            console.log(this.state._id)
+            // console.log(this.state._id)
             // debugger;
             // window.m = this.state
             // window.mp = this.props
@@ -179,7 +184,7 @@ class EditVenue extends React.Component{
         // var venue = this.props.venue;
         debugger;
         this.setState(nextProps.venue,function(){
-            console.log(this.state._id)//pip
+            // console.log(this.state._id)//pip
             // window.p= this.state
             // window.pp = nextProps
         });
@@ -187,11 +192,11 @@ class EditVenue extends React.Component{
     }
 
     updateVenue(){
-        console.log(this.state);
+        // console.log(this.state);
         axios.post('api/venueEdit/'+this.state._id,{name:this.state.name,email:this.state.email,address:this.state.address})
             .then(res=>{
-                console.log(res);
-                //this.props.updateVenueLists();
+                // console.log(res);
+                this.props.updateVenueLists();
 
             })
     }
@@ -199,30 +204,22 @@ class EditVenue extends React.Component{
         return(
             <div>
 
-
-
                 <TextField
                     name="email"
-                    id="margin-dense"
                     value={this.state.email}
                     helperText="Enter New email"
-                    margin="dense"
                     onChange={this.updateForm}
                 />
                 <TextField
                     name="name"
-                    id="margin-dense"
                     value={this.state.name}
                     helperText="Enter New name"
-                    margin="dense"
                     onChange={this.updateForm}
                 />
                 <TextField
                     name="address"
-                    id="margin-dense"
                     value={this.state.address}
                     helperText="Enter New address"
-                    margin="dense"
                     onChange={this.updateForm}
                 />
 
@@ -232,7 +229,5 @@ class EditVenue extends React.Component{
         );
     }
 }
-class DeleteVenue extends React.Component{
 
-}
 export default App;
