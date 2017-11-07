@@ -2,10 +2,42 @@ import React from 'react';
 import axios from 'axios';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+import { Link } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 
 
 class App extends React.Component {
+
+    render() {
+        return (
+
+            <div>
+                <Header />
+                <Main />
+            </div>
+
+        );
+    }
+}
+const Header = () => (
+    <header>
+        <nav>
+            <ul>
+                <li><Link to=''>Home</Link></li>
+            </ul>
+        </nav>
+    </header>
+);
+const Main = () => (
+    <main>
+        <Switch>
+            <Route exact path='/' component={VenuesData}/>
+        </Switch>
+    </main>
+)
+
+class VenuesData extends React.Component {
     constructor(props) {
         super(props);
 
