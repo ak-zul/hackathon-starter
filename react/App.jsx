@@ -40,35 +40,24 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: [],
             editvenue:{}
         };
         // this.history = browserHistory
-    }
-    updateVenueLists(){
-        axios.get("/api/venueList")
-            .then(res => {
-                console.log(res);
-                const   posts = res.data.venueList;
-                this.setState({ posts:posts});
-            });
+        this.updateVenueID= this.updateVenueID.bind(this);
     }
     updateVenueID(venue){
+        console.log(venue);
         this.setState({editvenue:venue},function(){
             console.log(this.state.editvenue._id) //popop
         })
-    }
-    componentDidMount() {
-        // debugger;
-        this.updateVenueLists();
     }
     render(){
         return(
             <main>
                 <Switch>
-                    <Route exact path='/' component={VenuesData}/>
+                    <Route exact path='/' component={VenuesData} />
                     <Route path='/create'  render={(props) =><CreateVenue/>}/>
-                    <Route path='editvenue/:id' component={EditVenue} />
+                    <Route path='/editvenue/:id' render={(props) =><EditVenue/>} />
                 </Switch>
 
 
@@ -80,33 +69,26 @@ class Main extends React.Component {
 
 class VenuesData extends React.Component {
     constructor(props) {
-        super(props);
-
+        super(props)
         this.state = {
             posts: [],
           editvenue:{}
         };
 
-         // this.updateVenueLists = this.updateVenueLists.bind(this);
+         this.updateVenueLists = this.updateVenueLists.bind(this);
          // this.updateVenueID = this.updateVenueID.bind(this);
-        // this.deleteVenue = this.deleteVenue.bind(this);
+        this.deleteVenue = this.deleteVenue.bind(this);
     }
 
     componentDidMount() {
-        // debugger;
+        debugger;
        this.updateVenueLists();
     }
-
-    // updateVenueID(venue){
-    //     this.setState({editvenue:venue},function(){
-    //         console.log(this.state.editvenue._id) //popop
-    //     })
-    // }
 
     updateVenueLists(){
         axios.get("/api/venueList")
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 const   posts = res.data.venueList;
                 this.setState({ posts:posts});
             });
@@ -124,9 +106,7 @@ class VenuesData extends React.Component {
         return (
 
             <div>
-                {this.state.editvenue._id ? (
-                    <EditVenue venue={this.state.editvenue}/>
-                ) : null}
+
                 <table>
                     <thead>
                     <tr>
@@ -175,7 +155,7 @@ class TableRow extends React.Component {
                             </td>
                             <td>
                             {/*{this.props.data.address}*/}
-                            <Button id="editBtn"  onClick={this.updateVenueID}> Edit</Button>
+                                <Link to={`editvenue/${this.props.data._id}`}><Button id="editBtn"  onClick={this.props.updateVenueID}> Edit </Button></Link>
                             </td>
                             <td>
                                 <Button id="deleteBtn"  onClick={this.deleteVenue}> Delete</Button>
@@ -203,9 +183,6 @@ class CreateVenue extends React.Component{
         console.log(e.target.value);
 
     }
-    componentDidMount() {
-
-    }
     createvenue(){
         axios.post('api/createVenue',{email:this.state.email})
             .then(res=>{
@@ -230,8 +207,11 @@ class CreateVenue extends React.Component{
 }
 
 class EditVenue extends React.Component{
-    constructor(props){
-        super(props);
+    static contextTypes = {
+        router: PropTypes.object
+    };
+    constructor(props, context) {
+        super(props,context);
         this.state = {};
 
 
@@ -249,7 +229,7 @@ class EditVenue extends React.Component{
 
     componentDidMount(){
         this.setState(this.props.venue,function(){
-            // console.log(this.state._id)
+             // console.log(this.state._id)
             // debugger;
             // window.m = this.state
             // window.mp = this.props
@@ -260,7 +240,7 @@ class EditVenue extends React.Component{
 
     componentWillReceiveProps(nextProps){
         // var venue = this.props.venue;
-        debugger;
+        // debugger;
         this.setState(nextProps.venue,function(){
             // console.log(this.state._id)//pip
             // window.p= this.state
@@ -274,8 +254,9 @@ class EditVenue extends React.Component{
         axios.post('api/venueEdit/'+this.state._id,{name:this.state.name,email:this.state.email,address:this.state.address})
             .then(res=>{
                 // console.log(res);
-                this.props.updateVenueLists();
-
+                // this.props.updateVenueLists();
+                // this.context.router.history.push("/");
+                console.log(res);
             })
     }
     render(){
