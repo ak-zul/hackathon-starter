@@ -39,7 +39,10 @@ class Header extends  React.Component {
 class Main extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            posts: [],
+            editvenue:{}
+        };
         // this.history = browserHistory
     }
     updateVenueLists(){
@@ -49,6 +52,11 @@ class Main extends React.Component {
                 const   posts = res.data.venueList;
                 this.setState({ posts:posts});
             });
+    }
+    updateVenueID(venue){
+        this.setState({editvenue:venue},function(){
+            console.log(this.state.editvenue._id) //popop
+        })
     }
     componentDidMount() {
         // debugger;
@@ -60,6 +68,7 @@ class Main extends React.Component {
                 <Switch>
                     <Route exact path='/' component={VenuesData}/>
                     <Route path='/create'  render={(props) =><CreateVenue/>}/>
+                    <Route path='editvenue/:id' component={EditVenue} />
                 </Switch>
 
 
@@ -88,11 +97,11 @@ class VenuesData extends React.Component {
        this.updateVenueLists();
     }
 
-    updateVenueID(venue){
-        this.setState({editvenue:venue},function(){
-            console.log(this.state.editvenue._id) //popop
-        })
-    }
+    // updateVenueID(venue){
+    //     this.setState({editvenue:venue},function(){
+    //         console.log(this.state.editvenue._id) //popop
+    //     })
+    // }
 
     updateVenueLists(){
         axios.get("/api/venueList")
