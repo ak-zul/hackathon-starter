@@ -42,22 +42,31 @@ class Main extends React.Component {
         this.state = {
             editvenue:{}
         };
+
         // this.history = browserHistory
         this.updateVenueID= this.updateVenueID.bind(this);
     }
     updateVenueID(venue){
-        console.log(venue);
-        this.setState({editvenue:venue},function(){
-            console.log(this.state.editvenue._id) //popop
-        })
+        // console.log(venue)
+        this.setState({editvenue:venue})
+
     }
+    // updateVenueID(venue){
+    //     venue=this.state.editvenue;
+    //     console.log("=========");
+    //     console.log(venue);
+    //     this.setState({editvenue:venue},function(){
+    //         console.log(this.state.editvenue._id) //popop
+    //     })
+    // }
     render(){
+        //console.log(editvenue);
         return(
             <main>
                 <Switch>
-                    <Route exact path='/' component={VenuesData} />
+                    <Route exact path='/' component={() => (<VenuesData updateVenue={this.updateVenueID} />)} />
                     <Route path='/create'  render={(props) =><CreateVenue/>}/>
-                    <Route path='/editvenue/:id' render={(props) =><EditVenue/>} />
+                    <Route path='/editvenue/:id' render={(props) =><EditVenue updateVenue={this.state.editvenue} />} />
                 </Switch>
 
 
@@ -76,15 +85,21 @@ class VenuesData extends React.Component {
         };
 
          this.updateVenueLists = this.updateVenueLists.bind(this);
-         // this.updateVenueID = this.updateVenueID.bind(this);
+         this.updateVenueID = this.updateVenueID.bind(this);
         this.deleteVenue = this.deleteVenue.bind(this);
     }
 
     componentDidMount() {
-        debugger;
+        // debugger;
        this.updateVenueLists();
     }
-
+    updateVenueID(venue){
+        // console.log(venue)
+        this.props.updateVenue(venue);
+        this.setState({editvenue:venue},function(){
+            // console.log(this.state.editvenue._id) //popop
+        })
+    }
     updateVenueLists(){
         axios.get("/api/venueList")
             .then(res => {
@@ -135,7 +150,6 @@ class TableRow extends React.Component {
     }
 
     updateVenueID(){
-        //console.log(this.props)
         this.props.updateVenueID(this.props.data)
 
     }
@@ -155,7 +169,7 @@ class TableRow extends React.Component {
                             </td>
                             <td>
                             {/*{this.props.data.address}*/}
-                                <Link to={`editvenue/${this.props.data._id}`}><Button id="editBtn"  onClick={this.props.updateVenueID}> Edit </Button></Link>
+                                <Link to={`editvenue/${this.props.data._id}`} onClick={this.updateVenueID}> Edit </Link>
                             </td>
                             <td>
                                 <Button id="deleteBtn"  onClick={this.deleteVenue}> Delete</Button>
@@ -228,7 +242,7 @@ class EditVenue extends React.Component{
     }
 
     componentDidMount(){
-        this.setState(this.props.venue,function(){
+        this.setState(this.props.updateVenue,function(){
              // console.log(this.state._id)
             // debugger;
             // window.m = this.state
@@ -241,7 +255,7 @@ class EditVenue extends React.Component{
     componentWillReceiveProps(nextProps){
         // var venue = this.props.venue;
         // debugger;
-        this.setState(nextProps.venue,function(){
+        this.setState(nextProps.updateVenue,function(){
             // console.log(this.state._id)//pip
             // window.p= this.state
             // window.pp = nextProps
@@ -255,8 +269,8 @@ class EditVenue extends React.Component{
             .then(res=>{
                 // console.log(res);
                 // this.props.updateVenueLists();
-                // this.context.router.history.push("/");
-                console.log(res);
+                this.context.router.history.push("/");
+                // console.log(res);
             })
     }
     render(){
