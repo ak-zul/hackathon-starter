@@ -117,9 +117,9 @@ exports.venueList=(req,res) =>{
 //
 // };
 exports.venueEdit= function (req,res) {
-    console.log(req.body, req.query, req.params);
-    Venue.findOneAndUpdate({_id: req.params.id}, req.body,{ new: true }, function (err,venueEdit) {
-        res.json({venueEdit:venueEdit,result:"ur done!!"});
+    // console.log(req.body, req.query, req.params);
+    Venue.findOneAndUpdate({_id: req.params.id}, req.body,{ new: true }, function (err,venueShow) {
+        res.json({venueShow:venueShow,result:"ur done!!"});
     })
 };
 
@@ -176,7 +176,7 @@ exports.venueSportList= function (req, res) {
 };
 exports.venueSportEdit = function (req, res) {
     Venue.findOne({_id: req.params.id},req.body,{new: true}, function(err,venue){
-        console.log(venue.sports);
+        // console.log(venue.sports);
         venue.sports = venue.sports.concat(req.body.sports);
         // var editval= sportEdit.sport[0];
 
@@ -219,6 +219,16 @@ exports.venueSportDelete = function (req, res) {
         // })
     })
 };
+
+exports.venueShow = function(req,res){
+    // Venue.findOneAndUpdate({_id: req.params.id}, req.body,{ new: true }, function (err,venueEdit) {
+    //     res.json({venueEdit:venueEdit,result:"ur done!!"});
+    //     // res.render('showVenue',{venueEdit:venueEdit})
+    // })
+    Venue.findOne({_id: req.params.id},req.body,{new: true}, function(err,venue){
+        res.json({venue:venue,result:"ur done!!"});
+    })
+}
 
 // exports.venuePhoto = function (req, res) {
 //

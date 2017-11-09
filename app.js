@@ -168,6 +168,7 @@ app.post('/createVenue',venueController.createVenue);
 app.get('/venueList',venueController.venueList);
 app.post('/venueEdit/:id',venueController.venueEdit);
 app.post('/venueDelete/:id',venueController.venueDelete);
+app.post('/venueShow/:id',venueController.venueShow);
 app.post('/venueAddSport/:id',venueController.venueAddSport);
 app.post('/venueSportList/:id',venueController.venueSportList);
 app.post('/venueSportEdit/:id',venueController.venueSportEdit);

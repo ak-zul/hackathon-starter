@@ -40,16 +40,22 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editvenue:{}
+            editvenue:{},
+            venueShow:{}
         };
 
         // this.history = browserHistory
         this.updateVenueID= this.updateVenueID.bind(this);
+        this.venueShow = this.venueShow.bind(this);
     }
     updateVenueID(venue){
         // console.log(venue)
         this.setState({editvenue:venue})
 
+    }
+    venueShow(data){
+        // console.log(data)
+        this.setState({venueShow:data})
     }
     // updateVenueID(venue){
     //     venue=this.state.editvenue;
@@ -64,9 +70,10 @@ class Main extends React.Component {
         return(
             <main>
                 <Switch>
-                    <Route exact path='/' component={() => (<VenuesData updateVenue={this.updateVenueID} />)} />
+                    <Route exact path='/' component={() => (<VenuesData updateVenue={this.updateVenueID} venueShow={this.venueShow}/>)} />
                     <Route path='/create'  render={(props) =><CreateVenue/>}/>
                     <Route path='/editvenue/:id' render={(props) =><EditVenue updateVenue={this.state.editvenue} />} />
+                    <Route path='/venueshow/:id' render={(props) =><VenueShow  venueShow={this.state.venueShow}    />} />
                 </Switch>
 
 
@@ -81,12 +88,14 @@ class VenuesData extends React.Component {
         super(props)
         this.state = {
             posts: [],
-          editvenue:{}
+          editvenue:{},
+          showvenue:{}
         };
 
          this.updateVenueLists = this.updateVenueLists.bind(this);
          this.updateVenueID = this.updateVenueID.bind(this);
         this.deleteVenue = this.deleteVenue.bind(this);
+        this.venueShow = this.venueShow.bind(this);
     }
 
     componentDidMount() {
@@ -109,12 +118,21 @@ class VenuesData extends React.Component {
             });
     }
     deleteVenue(id){
-        console.log(id);
+        // console.log(id);
         axios.post("/api/venueDelete/"+id)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.updateVenueLists();
             });
+    }
+    venueShow(id){
+        // console.log(id)
+
+        axios.post("/api/venueShow/"+id)
+            .then(res =>{
+                 // console.log(res.data.venue);
+                this.props.venueShow(res.data.venue);
+            })
     }
 
     render() {
@@ -130,7 +148,7 @@ class VenuesData extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.posts.map((venue, i) => <TableRow key = {i} data = {venue} updateVenueID={this.updateVenueID} deleteVenue={this.deleteVenue} />)}
+                    {this.state.posts.map((venue, i) => <TableRow key = {i} data = {venue} updateVenueID={this.updateVenueID} deleteVenue={this.deleteVenue} venueShow={this.venueShow}/>)}
                     </tbody>
                 </table>
 
@@ -140,13 +158,12 @@ class VenuesData extends React.Component {
     }
 }
 
-
-
 class TableRow extends React.Component {
     constructor(props) {
         super(props);
         this.updateVenueID=this.updateVenueID.bind(this);
-        this.deleteVenue=this.deleteVenue.bind(this)
+        this.deleteVenue=this.deleteVenue.bind(this);
+        this.venueShow=this.venueShow.bind(this)
     }
 
     updateVenueID(){
@@ -155,6 +172,9 @@ class TableRow extends React.Component {
     }
     deleteVenue(){
         this.props.deleteVenue(this.props.data._id);
+    }
+    venueShow(){
+        this.props.venueShow(this.props.data._id);
     }
     render() {
         return (
@@ -165,7 +185,7 @@ class TableRow extends React.Component {
 
                             </td>
                             <td>
-                                {this.props.data.email}
+                                <Link to={`venueshow/${this.props.data._id}`} onClick={this.venueShow}> {this.props.data.email} </Link>
                             </td>
                             <td>
                             {/*{this.props.data.address}*/}
@@ -300,6 +320,24 @@ class EditVenue extends React.Component{
             <Button  onClick={this.updateVenue} >Edit</Button>
             </div>
         );
+    }
+}
+
+class VenueShow extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {};
+    }
+    
+    render(){
+            return(
+            <div>
+                <h2>this is Details of particular venue</h2>
+                <p>{this.props.venueShow.name}</p>
+                <p>{this.props.venueShow.address}</p>
+                <p>{this.props.venueShow.email}</p>
+            </div>
+        )
     }
 }
 
